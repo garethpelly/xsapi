@@ -40,7 +40,7 @@ def planInfrastructure() {
 //         buildPayload()
 //
 //         runid = startPlan()
-// 
+//
 //         waitForPlan(runid)
     }
 }
@@ -49,10 +49,10 @@ def getWorkspaceId() {
     withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'jenkins-terraform-cloud']) {
         def response = httpRequest(
             customHeaders: [
-                    [ name: "Authorization", value: "Bearer " + env.BEARER_TOKEN ],
+                    [ name: "Authorization", value: "Bearer ${jenkins-terraform-cloud}"],
                     [ name: "Content-Type", value: "application/vnd.api+json" ]
                 ],
-            url: "https://app.terraform.io/api/v2/organizations/" + env.TF_ORGNAME + "/workspaces/" + env.TF_WORKSPACE
+            url: "https://app.terraform.io/api/v2/organizations/CurrencyFair/workspaces/engineering"
         )
     }
 
