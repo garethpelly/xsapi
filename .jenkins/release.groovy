@@ -51,7 +51,7 @@ def planInfrastructure() {
 
 def getWorkspaceId() {
     withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'SECRET')]) {
-        def response = http = new URL("https://app.terraform.io/api/v2/organizations/CurrencyFair/workspaces/engineering").openConnection() as HttpURLConnection
+        def http = new URL("https://app.terraform.io/api/v2/organizations/CurrencyFair/workspaces/engineering").openConnection() as HttpURLConnection
         http.setRequestProperty("Authorization", "Bearer ${SECRET}")
         http.setRequestProperty("Content-Type", "application/vnd.api+json")
         http.setDoOutput(true)
