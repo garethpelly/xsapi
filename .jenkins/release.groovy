@@ -1,9 +1,10 @@
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 node {
-    checkout()
-    build()
-    deploy()
+//     checkout()
+//     build()
+//     deploy()
     planInfrastructure()
     cleanWorkspace()
 }
@@ -49,17 +50,30 @@ def planInfrastructure() {
 }
 
 def getWorkspaceId() {
-    withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'JENKINSTERRAFORMCLOUD')]) {
-        def response = httpRequest(
-            customHeaders: [
-                    [ name: "Authorization", value: "Bearer ${JENKINSTERRAFORMCLOUD}"],
-                    [ name: "Content-Type", value: "application/vnd.api+json" ]
-                ],
-            url: "https://app.terraform.io/api/v2/organizations/CurrencyFair/workspaces/engineering"
-        )
+    withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'SECRET')]) {
+        def response = http = new URL("https://app.terraform.io/api/v2/organizations/CurrencyFair/workspaces/engineering").openConnection() as HttpURLConnection
+        http.setRequestProperty("Authorization", "Bearer ${SECRET}")
+        http.setRequestProperty("Content-Type", "application/vnd.api+json")
+        http.setDoOutput(true)
+        http.outputStream.write(body.getBytes("UTF-8"))
+        http.connect()
+
+        def response = [:]
+        if (http.responseCode == 200) {
+            response = new JsonSlurper().parseText(http.inputStream.getText('UTF-8'))
+        } else {
+            response = new JsonSlurper().parseText(http.errorStream.getText('UTF-8'))
+        }
+//         def response = httpRequest(
+//             customHeaders: [
+//                     [ name: "Authorization", value: "Bearer ${JENKINSTERRAFORMCLOUD}"],
+//                     [ name: "Content-Type", value: "application/vnd.api+json" ]
+//                 ],
+//             url: "https://app.terraform.io/api/v2/organizations/CurrencyFair/workspaces/engineering"
+//         )
     }
 
-    def data = new JsonSlurper().parseText(response.content)
-    println ("Workspace Id: " + data.data.id)
+    println "response: ${response}"
+    println ("Workspace Id: " + response.data.id)
     return data.data.id
 }
