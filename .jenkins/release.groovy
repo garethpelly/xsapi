@@ -49,7 +49,7 @@ def planInfrastructure() {
 }
 
 def getWorkspaceId() {
-    withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'jenkins-terraform-cloud']) {
+    withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'jenkins-terraform-cloud')]) {
         def response = httpRequest(
             customHeaders: [
                     [ name: "Authorization", value: "Bearer ${jenkins-terraform-cloud}"],
