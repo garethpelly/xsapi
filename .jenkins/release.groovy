@@ -49,10 +49,10 @@ def planInfrastructure() {
 }
 
 def getWorkspaceId() {
-    withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'jenkins-terraform-cloud')]) {
+    withCredentials([string(credentialsId: 'jenkins-terraform-cloud', variable: 'JENKINSTERRAFORMCLOUD')]) {
         def response = httpRequest(
             customHeaders: [
-                    [ name: "Authorization", value: "Bearer ${jenkins-terraform-cloud}"],
+                    [ name: "Authorization", value: "Bearer ${JENKINSTERRAFORMCLOUD}"],
                     [ name: "Content-Type", value: "application/vnd.api+json" ]
                 ],
             url: "https://app.terraform.io/api/v2/organizations/CurrencyFair/workspaces/engineering"
