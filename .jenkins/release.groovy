@@ -4,6 +4,7 @@ node {
     checkout()
     build()
     deploy()
+    planInfrastructure()
     cleanWorkspace()
 }
 
